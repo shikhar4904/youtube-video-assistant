@@ -7,8 +7,8 @@ from main_backend import reply, extract_video_id, extract_transcript, retrieve_d
 if 'retriever' not in st.session_state:
     st.session_state['retriever'] = None
 
-if 'video_url' not in st.session_state:
-    st.session_state['video_url'] = None
+if 'video_id' not in st.session_state:
+    st.session_state['video_id'] = None
 
 if 'message_history' not in st.session_state:
     st.session_state['message_history'] = []
@@ -17,17 +17,17 @@ if 'message_history' not in st.session_state:
 #################  Sidebar  #################
 
 st.sidebar.title("Enter youtube video link")
-st.session_state['video_url'] = st.sidebar.text_input("URL")
-video_id = extract_video_id(st.session_state['video_url'])
+video_url = st.sidebar.text_input("URL")
+st.session_state['video_id'] = extract_video_id(video_url)
 load_button = st.sidebar.button("Load")
 
 if load_button:
-    if st.session_state['video_url']:
-        transcript = extract_transcript(st.session_state['video_url'])
+    if st.session_state['video_id']:
+        transcript = extract_transcript(video_url)
         if transcript:
-            st.session_state['retriever'] = retrieve_documents(st.session_state['video_url'])
+            st.session_state['retriever'] = retrieve_documents(video_url)
             st.sidebar.success("Video loaded successfully")
-            st.sidebar.button(st.session_state['video_url'])
+            st.sidebar.button(st.session_state['video_id'])
         else:
             st.sidebar.error("No transcript available for this video")
     else:
